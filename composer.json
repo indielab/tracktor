@@ -1,0 +1,13 @@
+{
+    "require": {
+        "symfony/console": "^3.2",
+        "phpunit/phpunit": "~5.0",
+        "symfony/framework-bundle": "^3.2"
+    },
+    "autoload" : {
+        "psr-4" : {
+            "indielab\\tracktor\\" : "src/",
+            "indielab\\tracktor\\tests\\" : "tests/"
+        }
+    }
+}
