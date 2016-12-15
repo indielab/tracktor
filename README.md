@@ -5,7 +5,7 @@ The tracktor!
 ## run
 
 ```php
-php tracktor.php
+php tracktor.php track <DEVICE_NAME>
 ```
 
 ## test

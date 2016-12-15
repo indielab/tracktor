@@ -13,15 +13,13 @@ class TrackCommandTest extends TracktorTestCase
     {
         $app = new Application();
         $app->add(new TrackCommand());
-        $command = $app->find('app:tracker');
+        $command = $app->find('track');
         $commandTester = new CommandTester($command);
         $commandTester->execute([
             'command' => $command->getName(),
             'device' => 'fw0',
         ]);
         
-        $out = $commandTester->getDisplay();
-        
-        $this->assertContains('Input: fw0', $out);
+        $this->assertContains('Input: fw0', $commandTester->getDisplay());
     }
 }
