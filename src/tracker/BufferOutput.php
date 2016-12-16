@@ -61,4 +61,9 @@ class BufferOutput
         
         return $value;
     }
+    
+    public function getTime()
+    {
+        return time();
+    }
 }

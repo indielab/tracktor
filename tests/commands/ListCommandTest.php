@@ -3,21 +3,21 @@
 namespace indielab\tracktor\tests\commands;
 
 use indielab\tracktor\tests\TracktorTestCase;
-use indielab\tracktor\commands\TrackCommand;
 use Symfony\Component\Console\Tester\CommandTester;
 use Symfony\Component\Console\Application;
+use indielab\tracktor\commands\ListCommand;
 
-class TrackCommandTest extends TracktorTestCase
+class ListCommandTest extends TracktorTestCase
 {
     public function testTrackCommand()
     {
         $app = new Application();
-        $app->add(new TrackCommand());
-        $command = $app->find('track');
+        $app->add(new ListCommand());
+        $command = $app->find('list');
         $commandTester = new CommandTester($command);
         $commandTester->execute([
             'command' => $command->getName(),
-            'device' => 'fw0',
+            'input' => 'fw0',
         ]);
         
         

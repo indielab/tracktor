@@ -7,8 +7,16 @@ The tracktor!
 
 ## Run
 
+List Data
+
 ```php
-php tracktor.php track <DEVICE_NAME>
+sudo php tracktor.php list <DEVICE_NAME>
+```
+
+Transfer Data:
+
+```php
+sudo php tracktor.php transfer <DEVICE_NAME> <API_URL> <MACHINE_NAME>
 ```
 
 ## Testing

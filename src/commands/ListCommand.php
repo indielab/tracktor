@@ -14,21 +14,21 @@ use indielab\tracktor\readers\TcpdumpReader;
  *
  * @author Basil Suter <basil@nadar.io>
  */
-class TrackCommand extends Command
+class ListCommand extends Command
 {
     protected function configure()
     {
-        $this->setName('track')
-            ->addArgument('device', InputArgument::REQUIRED, 'The name of the device to listen.')
+        $this->setName('list')
+            ->addArgument('input', InputArgument::REQUIRED, 'The name of the input to listen.')
             ->setDescription('Tracking Data based on Input device')
             ->setHelp('app:tracker fwh01');
     }
     
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $device = $input->getArgument('device');
+        $inputDevice = $input->getArgument('input');
      
-        $reader = new TcpdumpReader($device, 10, function ($data) use ($output) {
+        $reader = new TcpdumpReader($inputDevice, 10, function ($data) use ($output) {
             $tables = [];
             foreach ($data as $provider) {
                 $buff = new BufferOutput($provider);
