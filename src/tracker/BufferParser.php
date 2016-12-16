@@ -5,7 +5,7 @@ namespace indielab\tracktor\tracker;
 /**
  * https://regex101.com/r/gPh0tS/1
  *
- * @author nadar
+ * @author Basil Suter <basil@nadar.io>
  */
 class BufferParser implements DataProviderInterface
 {

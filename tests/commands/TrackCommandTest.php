@@ -20,6 +20,7 @@ class TrackCommandTest extends TracktorTestCase
             'device' => 'fw0',
         ]);
         
-        $this->assertContains('Input: fw0', $commandTester->getDisplay());
+        
+        $this->assertEmpty($commandTester->getDisplay());
     }
 }
