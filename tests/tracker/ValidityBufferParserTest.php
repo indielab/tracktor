@@ -13,7 +13,7 @@ class ValidityBufferParserTest extends TracktorTestCase
     ];
     
     private $invalidPatterns = [
-        'abc',  
+        'abc',
     ];
     
     public function testValidPatterns()

@@ -37,11 +37,17 @@ class StubDataProvider implements DataProviderInterface
 
 class SegmentBufferOutputTest extends TracktorTestCase
 {
+    /**
+     * @var array The KEY is the input, VALUE is the expected result
+     */
     public $compareMac = [
         '12:12:12' => '12:12:12',
         'SA:12:12' => '12:12',
     ];
     
+    /**
+     * @var array The KEY is the input, VALUE is the expected result
+     */
     public $compareSignal = [
         '-1' => '-1',
         '-1 Signal' => '-1',
@@ -49,6 +55,16 @@ class SegmentBufferOutputTest extends TracktorTestCase
         '-1' => '-1',
         '-123' => '-123',
         '-123 Signal' => '-123',
+        '1' => false,
+    ];
+
+    /**
+     * @var array The KEY is the expected result and the value array is the input. Inverted to signal and mac comperator!
+     */
+    public $compareSSID = [
+        'SSID1' => ['SSID1'],
+        'SSID2' => ['(SSID2)'],
+        'BAR' => ['(FOO)', '(BAR)'],
     ];
     
     public function testCompareMac()
@@ -66,6 +82,15 @@ class SegmentBufferOutputTest extends TracktorTestCase
             $provider = new StubDataProvider($input, null, null);
             $output = new BufferOutput($provider);
             $this->assertSame($match, $output->getSignal());
+        }
+    }
+    
+    public function testCompareSSID()
+    {
+        foreach ($this->compareSSID as $match => $input) {
+            $provider = new StubDataProvider(null, null, $input);
+            $output = new BufferOutput($provider);
+            $this->assertSame($match, $output->getSSID());
         }
     }
 }

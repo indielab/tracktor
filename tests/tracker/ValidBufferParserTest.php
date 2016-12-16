@@ -5,6 +5,7 @@ namespace indielab\tracktor\tests\tracker;
 use indielab\tracktor\tests\TracktorTestCase;
 use indielab\tracktor\tracker\BufferParser;
 use indielab\tracktor\tracker\BufferOutput;
+
 class ValidBufferParserTest extends TracktorTestCase
 {
     public $tests = [
@@ -23,7 +24,7 @@ class ValidBufferParserTest extends TracktorTestCase
             $output = new BufferOutput($parser);
             $this->assertSame($test['signal'], $output->getSignal());
             $this->assertSame($test['mac'], $output->getMac());
-            $this->assertSame($test['name'], $output->getSID());
+            $this->assertSame($test['name'], $output->getSSID());
         }
     }
 }

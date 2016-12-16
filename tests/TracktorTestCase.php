@@ -6,5 +6,4 @@ use PHPUnit\Framework\TestCase;
 
 class TracktorTestCase extends TestCase
 {
-    
 }

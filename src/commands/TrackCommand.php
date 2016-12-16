@@ -7,6 +7,8 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Input\InputArgument;
 use indielab\tracktor\tracker\BufferParser;
+use indielab\tracktor\tracker\BufferOutput;
+use Symfony\Component\Console\Helper\Table;
 
 class TrackCommand extends Command
 {
@@ -30,9 +32,20 @@ class TrackCommand extends Command
         
         $handle = popen("tcpdump -I -e -i {$device} -s 256 type mgt subtype probe-req -l 2>&1", 'r');
         
-        while(!feof($handle))
-        {
-            $parser = new BufferParser(fgets($handle));
+        $table = new Table($output);
+        
+        $table->setheaders(['mac', 'signal', 'ssid']);
+        while (!feof($handle)) {
+            $provider = new BufferParser(fgets($handle));
+            if ($provider->isValid()) {
+                $output = new BufferOutput($provider);
+                
+                $table->setRows([
+                    [$output->getMac(), $output->getSignal(), $output->getSSID()]
+                ]);
+                
+                $table->render();
+            }
         }
         
         pclose($handle);

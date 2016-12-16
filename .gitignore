@@ -49,3 +49,4 @@
 /.settings/
 /.buildpath
 /.project
+/.php_cs.cache
