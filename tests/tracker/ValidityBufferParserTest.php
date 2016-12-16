@@ -5,7 +5,7 @@ namespace indielab\tracktor\tests\tracker;
 use indielab\tracktor\tests\TracktorTestCase;
 use indielab\tracktor\tracker\BufferParser;
 
-class ValditityBufferParserTest extends TracktorTestCase
+class ValidityBufferParserTest extends TracktorTestCase
 {
     private $validPatterns = [
         '16:56:31.948018 1.0 Mb/s 2412 MHz 11b -63dB signal antenna 1 BSSID:Broadcast DA:Broadcast SA:0c:74:c2:27:4d:3c (oui Unknown) Probe Request () [1.0 2.0 5.5 11.0 Mbit]',

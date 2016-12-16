@@ -21,7 +21,6 @@ class ValidBufferParserTest extends TracktorTestCase
         foreach ($this->tests as $test) {
             $parser = new BufferParser($test['buffer']);
             $output = new BufferOutput($parser);
-            
             $this->assertSame($test['signal'], $output->getSignal());
             $this->assertSame($test['mac'], $output->getMac());
             $this->assertSame($test['name'], $output->getSID());
