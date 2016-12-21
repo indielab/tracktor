@@ -12,7 +12,7 @@ use Curl\Curl;
 
 class TransferCommand extends Command
 {
-    private $machine;
+    private $machineId;
     private $api;
     
     protected function configure()
@@ -27,11 +27,26 @@ class TransferCommand extends Command
     {
         $args = $input->getArguments();
         
-        $this->machine = $args['machine'];
         $this->api = $args['api'];
         
-        $reader = new TcpdumpReader($args['device'], 30, [$this, 'transmit']);
+        $config = $this->getConfig($this->api, $args['machine']);
+        
+        $this->machineId = $config['id'];
+        
+        $reader = new TcpdumpReader($args['device'], $config['wait_timer'], [$this, 'transmit']);
         $reader->run();
+    }
+    
+    public function getConfig($api, $machineId)
+    {
+        $curl = new Curl();
+        $curl->get(rtrim($api, '/') . '/config', ['machineId' => $machineId]);
+        
+        if ($curl->error) {
+            throw new \Exception("Unable to find config for the machine " . $machineId);
+        }
+        
+        return json_decode($curl->response, true);
     }
     
     public function transmit($data)
@@ -40,7 +55,7 @@ class TransferCommand extends Command
             $buff = new BufferOutput($provider);
             $curl = new Curl();
             $curl->post($this->api, [
-                'machine' => $this->machine,
+                'machine_id' => $this->machineId,
                 'mac' => $buff->getMac(),
                 'signal' => $buff->getSignal(),
                 'timestamp' => $buff->getTime(),

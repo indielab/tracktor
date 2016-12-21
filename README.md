@@ -9,13 +9,13 @@ The tracktor!
 
 List Data
 
-```php
+```sh
 sudo php tracktor.php list <DEVICE_NAME>
 ```
 
 Transfer Data:
 
-```php
+```sh
 sudo php tracktor.php transfer <DEVICE_NAME> <API_URL> <MACHINE_NAME>
 ```
 
@@ -30,5 +30,5 @@ sudo php tracktor.php transfer <DEVICE_NAME> <API_URL> <MACHINE_NAME>
 |type|description
 |----|-----------
 |mac|The mac adresse of the client, can also be randomized
-|signal|Values close to 0 are closer to the device. Means -90 farther then -60.
+|signal|Values close to 0 are closer to the device. `-90` is farther then `-60`.
 |ssid|The prob request lookup for the following ssid.
