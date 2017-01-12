@@ -19,6 +19,10 @@ Transfer Data:
 sudo php tracktor.php transfer <DEVICE_NAME> <API_URL> <MACHINE_NAME>
 ```
 
+## Phare Creation
+
+In order to create a phare install: `sudo apt-get install php7.0-bcmath`
+
 ## Testing
 
 ```sh
