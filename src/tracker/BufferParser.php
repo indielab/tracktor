@@ -31,6 +31,10 @@ class BufferParser implements DataProviderInterface
     
     private function parse()
     {
+        if (strpos($this->getBuffer(), 'You don\'t have permission to capture on that device')) {
+            throw new \Exception("Unable to read from the network device, you have to run the script as ROOT.");
+        }
+            
         $preg = preg_match_all(self::REGEX, $this->getBuffer(), $results);
         
         $signal = $this->findSegment(self::KEY_SIGNAL, $results);

@@ -30,7 +30,6 @@ class TransferCommand extends Command
         $this->api = $args['api'];
         
         $config = $this->getConfig($this->api, $args['machine']);
-        
         $this->machineId = $config['id'];
         
         $reader = new TcpdumpReader($args['device'], $config['wait_timer'], [$this, 'transmit']);
@@ -46,7 +45,13 @@ class TransferCommand extends Command
             throw new \Exception("Unable to find config for the machine " . $machineId);
         }
         
-        return json_decode($curl->response, true);
+        $json = json_decode($curl->response, true);
+        
+        if (json_last_error() == JSON_ERROR_NONE) {
+            return $json;
+        }
+        
+        throw new \Exception("Unable to decode API Response: " . $curl->response);
     }
     
     public function transmit($data)
