@@ -30,7 +30,7 @@ class TransferCommand extends Command
         $this->api = $args['api'];
         
         $config = $this->getConfig($this->api, $args['machine']);
-        $this->machineId = $config['id'];
+        $this->configId = $config['id'];
         
         $reader = new TcpdumpReader($args['device'], $config['wait_timer'], [$this, 'transmit']);
         $reader->run();
@@ -60,7 +60,7 @@ class TransferCommand extends Command
             $buff = new BufferOutput($provider);
             $curl = new Curl();
             $curl->post($this->api, [
-                'machine_id' => $this->machineId,
+                'config_id' => $this->configId,
                 'mac' => $buff->getMac(),
                 'signal' => $buff->getSignal(),
                 'timestamp' => $buff->getTime(),
