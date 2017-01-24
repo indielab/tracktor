@@ -13,6 +13,12 @@ List Data
 sudo php tracktor.php list <DEVICE_NAME>
 ```
 
+Json Output
+
+```sh
+sudo php tracktor.php json <DEVICE_NAME>
+```
+
 Transfer Data:
 
 ```sh
