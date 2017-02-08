@@ -5,25 +5,15 @@
 
 The tracktor!
 
-## Run
+## Commands
 
-List Data
+> You have to run the php process as sudo in order to read data from the wifi device with tcpdump.
 
-```sh
-sudo php tracktor.php list <DEVICE_NAME>
-```
-
-Json Output
-
-```sh
-sudo php tracktor.php json <DEVICE_NAME>
-```
-
-Transfer Data:
-
-```sh
-sudo php tracktor.php transfer <DEVICE_NAME> <API_URL> <MACHINE_NAME>
-```
+|name|description|run
+|----|-----------|---
+|list|Generate a table view of the data.|`sudo php tracktor.php list <DEVICE_NAME>`
+|json|Generate a json_encode output.|`sudo php tracktor.php json <DEVICE_NAME>`
+|transfer|Transfer the data to a Rest API.|`sudo php tracktor.php transfer <DEVICE_NAME> <API_URL> <MACHINE_NAME>`
 
 ## Phare Creation
 

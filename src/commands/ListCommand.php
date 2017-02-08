@@ -2,45 +2,64 @@
 
 namespace indielab\tracktor\commands;
 
-use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Helper\Table;
-use indielab\tracktor\tracker\BufferOutput;
-use indielab\tracktor\readers\TcpdumpReader;
+use indielab\tracktor\base\BaseCommand;
+use indielab\tracktor\base\OutputIterator;
 
 /**
+ * List data from a device and output in table format.
  *
  * @author Basil Suter <basil@nadar.io>
  */
-class ListCommand extends Command
+class ListCommand extends BaseCommand
 {
+    /**
+     * @inheritdoc
+     */
     protected function configure()
     {
         $this->setName('list')
-            ->addArgument('input', InputArgument::REQUIRED, 'The name of the input to listen.')
-            ->setDescription('Tracking Data based on Input device')
-            ->setHelp('app:tracker fwh01');
+        ->addArgument('device', InputArgument::REQUIRED, 'The device name to lookup with the tcpdump command. In order to find the device name run the `ifconfig` command.')
+        ->setDescription('List data from a device and output in table format.')
+        ->setHelp('sudo php tracktor.php list <DEVICE_NAME>');
     }
-    
+
+    /**
+     * @inheritdoc
+     */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $inputDevice = $input->getArgument('input');
+        $inputDevice = $input->getArgument('device');
      
-        $reader = new TcpdumpReader($inputDevice, 10, function ($data) use ($output) {
+        $output->writeln(['Current memory: ' . $this->getCurrentMemory(), 'Max memory:' . $this->getMaxMemory()]);
+        
+        $reader = $this->createReaderObject($inputDevice, 10, function (OutputIterator $data) use ($output) {
             $tables = [];
-            foreach ($data as $provider) {
-                $buff = new BufferOutput($provider);
-                $tables[] = [$buff->getMac(), $buff->getSignal(), $buff->getSSID(), date("H:i:s")];
+            foreach ($data as $item) {
+                /* @var $item \indielab\tracktor\base\OutputItemInterface */
+                $tables[] = [$item->getMac(), $item->getSignal(), $item->getSSID(), date("H:i:s"), $this->getCurrentMemory(), $this->getMaxMemory()];
             }
-            
             $table = new Table($output);
-            $table->setheaders(['Mac', 'Signal', 'SSID', 'Time']);
+            $table->setheaders(['Mac', 'Signal', 'SSID', 'Time', 'Memory current', 'Memory max']);
             $table->setRows($tables);
             $table->render();
+            unset($table);
+            unset($data);
         });
-        
+
         $reader->run();
+    }
+    
+    public function getCurrentMemory()
+    {
+        return sprintf("%dKB", round(memory_get_usage() / 1024));
+    }
+    
+    public function getMaxMemory()
+    {
+        return sprintf("%dKB", round(memory_get_peak_usage() / 1024));
     }
 }

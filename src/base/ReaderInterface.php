@@ -1,6 +1,6 @@
 <?php
 
-namespace indielab\tracktor\readers;
+namespace indielab\tracktor\base;
 
 /**
  *
@@ -8,5 +8,7 @@ namespace indielab\tracktor\readers;
  */
 interface ReaderInterface
 {
+    public function __construct($device, $waitTimer, $callback);
+    
     public function run();
 }

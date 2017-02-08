@@ -9,20 +9,35 @@ use Symfony\Component\Console\Output\OutputInterface;
 use indielab\tracktor\readers\TcpdumpReader;
 use indielab\tracktor\tracker\BufferOutput;
 use Curl\Curl;
+use indielab\tracktor\base\BaseCommand;
+use indielab\tracktor\base\OutputIterator;
 
-class TransferCommand extends Command
+/**
+ * Send collected data based on a wifi device to a Rest API.
+ *
+ * @author Basil Suter <basil@nadar.io>
+ */
+class TransferCommand extends BaseCommand
 {
     private $machineId;
     private $api;
     
+    /**
+     * @inheritdoc
+     */
     protected function configure()
     {
         $this->setName('transfer')
-            ->addArgument('device', InputArgument::REQUIRED, 'rcpdump device name')
-            ->addArgument('api', InputArgument::REQUIRED, 'The api endpoint to transfer data')
-            ->addArgument('machine', InputArgument::REQUIRED, 'machine identifier for the api');
+        ->addArgument('device', InputArgument::REQUIRED, 'The device name to lookup with the tcpdump command. In order to find the device name run the `ifconfig` command.')
+        ->addArgument('api', InputArgument::REQUIRED, 'The api endpoint to transfer data')
+        ->addArgument('machine', InputArgument::REQUIRED, 'machine identifier for the api')
+        ->setDescription('Send collected data based on a wifi device to a Rest API.')
+        ->setHelp('sudo php tracktor.php transfer <DEVICE_NAME> <API_URL> <MACHINE_NAME>');
     }
     
+    /**
+     * @inheritdoc
+     */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $args = $input->getArguments();
@@ -32,7 +47,7 @@ class TransferCommand extends Command
         $config = $this->getConfig($this->api, $args['machine']);
         $this->configId = $config['id'];
         
-        $reader = new TcpdumpReader($args['device'], $config['wait_timer'], [$this, 'transmit']);
+        $reader = $this->createReaderObject($args['device'], $config['wait_timer'], [$this, 'transmit']);
         $reader->run();
     }
     
@@ -48,24 +63,28 @@ class TransferCommand extends Command
         $json = json_decode($curl->response, true);
         
         if (json_last_error() == JSON_ERROR_NONE) {
+            unset($curl);
             return $json;
         }
         
         throw new \Exception("Unable to decode API Response: " . $curl->response);
     }
     
-    public function transmit($data)
+    public function transmit(OutputIterator $data)
     {
-        foreach ($data as $provider) {
-            $buff = new BufferOutput($provider);
+        foreach ($data as $item) {
+            /* @var $item \indielab\tracktor\base\OutputItemInterface */
             $curl = new Curl();
             $curl->post($this->api, [
                 'config_id' => $this->configId,
-                'mac' => $buff->getMac(),
-                'signal' => $buff->getSignal(),
-                'timestamp' => $buff->getTime(),
-                'ssid' => $buff->getSSID(),
+                'mac' => $item->getMac(),
+                'signal' => $item->getSignal(),
+                'timestamp' => time(),
+                'ssid' => $item->getSSID(),
             ]);
+            unset($curl);
         }
+        
+        unset($data);
     }
 }

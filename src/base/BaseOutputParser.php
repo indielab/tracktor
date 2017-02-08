@@ -1,14 +1,19 @@
 <?php
 
-namespace indielab\tracktor\tracker;
+namespace indielab\tracktor\base;
 
 /**
+ * Parse the Output Buffer from the Popen command into its parts and verify if its valid.
+ *
  * https://regex101.com/r/gPh0tS/1
  *
  * @author Basil Suter <basil@nadar.io>
  */
-class BufferParser implements DataProviderInterface
+abstract class BaseOutputParser implements OutputItemInterface
 {
+    /**
+     * @var string Ensure path regex: https://regex101.com/r/gPh0tS/1
+     */
     const REGEX = '/(?<signal>[\-0-9dB]+\ssignal)|(?<mac>SA\:[a-z0-9\:]+)|(?<names>\(([\_\-0-9a-zA-Z\s]+)\))/mi';
     
     const KEY_SIGNAL = 'signal';
@@ -27,6 +32,16 @@ class BufferParser implements DataProviderInterface
     {
         $this->_buffer = trim($buffer);
         $this->parse();
+    }
+    
+    public function setSignalSegment($signal)
+    {
+        $this->_signalSegment = $signal;
+    }
+    
+    public function getSignalSegement()
+    {
+        return $this->_signalSegment;
     }
     
     private function parse()
@@ -54,7 +69,7 @@ class BufferParser implements DataProviderInterface
         $this->_isValid = true;
     }
     
-    private function getSegment($name, $default= false)
+    private function getSegment($name, $default = null)
     {
         return (isset($this->_segments[$name])) ? $this->_segments[$name] : $default;
     }
@@ -77,7 +92,7 @@ class BufferParser implements DataProviderInterface
         return $value;
     }
     
-    public function getBuffer()
+    protected function getBuffer()
     {
         return $this->_buffer;
     }
@@ -87,18 +102,35 @@ class BufferParser implements DataProviderInterface
         return $this->_isValid;
     }
     
-    public function getNames()
+    public function getSegmentSSID()
     {
-        return $this->getSegment(self::KEY_NAMES, []);
+        $array = $this->getSegment(self::KEY_NAMES, []);
+        
+        if (empty($array)) {
+            return null;
+        }
+        
+        $item = end($array);
+        
+        if (preg_match('/\((.*)\)/i', $item, $results)) {
+            return $results[1];
+        }
+        
+        return $item;
     }
     
-    public function getMac()
+    public function getSegmentMac()
     {
         return $this->toString($this->getSegment(self::KEY_MAC));
     }
     
-    public function getSignal()
+    public function getSegmentSignal()
     {
         return $this->toString($this->getSegment(self::KEY_SIGNAL));
+    }
+    
+    public function __destruct()
+    {
+        unset($this->_buffer);
     }
 }
