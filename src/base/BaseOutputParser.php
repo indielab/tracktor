@@ -2,6 +2,9 @@
 
 namespace indielab\tracktor\base;
 
+
+use indielab\tracktor\ExitException;
+
 /**
  * Parse the Output Buffer from the Popen command into its parts and verify if its valid.
  *
@@ -34,20 +37,10 @@ abstract class BaseOutputParser implements OutputItemInterface
         $this->parse();
     }
     
-    public function setSignalSegment($signal)
-    {
-        $this->_signalSegment = $signal;
-    }
-    
-    public function getSignalSegement()
-    {
-        return $this->_signalSegment;
-    }
-    
     private function parse()
     {
         if (strpos($this->getBuffer(), 'You don\'t have permission to capture on that device')) {
-            throw new \Exception("Unable to read from the network device, you have to run the script as ROOT.");
+            throw new ExitException("Unable to read from the network device, you have to run the script as ROOT.");
         }
             
         $preg = preg_match_all(self::REGEX, $this->getBuffer(), $results);

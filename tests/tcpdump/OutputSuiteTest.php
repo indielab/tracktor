@@ -5,7 +5,7 @@ namespace indielab\tracktor\tests\tracker;
 use indielab\tracktor\tests\TracktorTestCase;
 use indielab\tracktor\tcpdump\Output;
 
-class ValidBufferParserTest extends TracktorTestCase
+class OutputSuiteTest extends TracktorTestCase
 {
     public $tests = [
         [
