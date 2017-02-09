@@ -14,4 +14,22 @@ abstract class BaseCommand extends Command
 
         return new $class($device, $waitTimer, $callback);
     }
+    
+    /**
+     *
+     * @return string
+     */
+    public function getCurrentMemory()
+    {
+        return sprintf("%dKB", round(memory_get_usage() / 1024));
+    }
+    
+    /**
+     *
+     * @return string
+     */
+    public function getMaxMemory()
+    {
+        return sprintf("%dKB", round(memory_get_peak_usage() / 1024));
+    }
 }

@@ -2,7 +2,6 @@
 
 namespace indielab\tracktor\base;
 
-
 use indielab\tracktor\ExitException;
 
 /**
@@ -105,11 +104,7 @@ abstract class BaseOutputParser implements OutputItemInterface
         
         $item = end($array);
         
-        if (preg_match('/\((.*)\)/i', $item, $results)) {
-            return $results[1];
-        }
-        
-        return $item;
+        return preg_replace('/\((.*)\)/i', '$1', $item);
     }
     
     public function getSegmentMac()

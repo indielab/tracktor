@@ -2,15 +2,14 @@
 
 namespace indielab\tracktor\commands;
 
+use Curl\Curl;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use indielab\tracktor\readers\TcpdumpReader;
-use indielab\tracktor\tracker\BufferOutput;
-use Curl\Curl;
 use indielab\tracktor\base\BaseCommand;
 use indielab\tracktor\base\OutputIterator;
+use indielab\tracktor\ExitException;
 
 /**
  * Send collected data based on a wifi device to a Rest API.
@@ -57,7 +56,7 @@ class TransferCommand extends BaseCommand
         $curl->get(rtrim($api, '/') . '/config', ['machineId' => $machineId]);
         
         if ($curl->error) {
-            throw new \Exception("Unable to find config for the machine " . $machineId);
+            throw new ExitException("Unable to find config for the machine " . $machineId);
         }
         
         $json = json_decode($curl->response, true);
@@ -67,7 +66,7 @@ class TransferCommand extends BaseCommand
             return $json;
         }
         
-        throw new \Exception("Unable to decode API Response: " . $curl->response);
+        throw new ExitException("Unable to decode API Response: " . $curl->response);
     }
     
     public function transmit(OutputIterator $data)

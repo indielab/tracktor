@@ -52,14 +52,4 @@ class ListCommand extends BaseCommand
 
         $reader->run();
     }
-    
-    public function getCurrentMemory()
-    {
-        return sprintf("%dKB", round(memory_get_usage() / 1024));
-    }
-    
-    public function getMaxMemory()
-    {
-        return sprintf("%dKB", round(memory_get_peak_usage() / 1024));
-    }
 }

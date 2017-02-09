@@ -26,7 +26,13 @@ class OutputSuiteTest extends TracktorTestCase
             'mac' => null,
             'ssid' => null,
             'valid' => false,
-        ]
+        ], [
+            'buffer' => '17:33:37.426882 1.0 Mb/s 2412 MHz 11b -69dB signal antenna 1 BSSID:Broadcast DA:Broadcast SA:24:1f:a0:5d:77:c2 Probe Request (foo(bar)) [1.0* 2.0* 5.5* 11.0* 6.0* 9.0* 12.0* 18.0* Mbit]',
+            'signal' => '-69',
+            'mac' => '24:1f:a0:5d:77:c2',
+            'ssid' => 'bar',
+            'valid' => true,
+        ],
     ];
     
     public function testWithBuffers()

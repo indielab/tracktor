@@ -2,9 +2,9 @@
 
 namespace indielab\tracktor\tcpdump;
 
-use Exception;
 use indielab\tracktor\base\OutputIterator;
 use indielab\tracktor\base\BaseReader;
+use indielab\tracktor\ExitException;
 
 /**
  * Rcpdump Reader
@@ -33,7 +33,7 @@ class Reader extends BaseReader
         $handle = popen("tcpdump -I -e -i {$this->getDevice()} -s 256 type mgt subtype probe-req -l 2>&1", 'r');
         
         if (!$handle) {
-            throw Exception("Popen Handler returns false when run tcpdump command on {$this->getDevice()}.");
+            throw new ExitException("Popen Handler returns false when run tcpdump command on {$this->getDevice()}.");
         }
             
         $stamp = time();

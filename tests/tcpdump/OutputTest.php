@@ -29,7 +29,6 @@ class OutputTest extends TracktorTestCase
     public function testOutputParserInit()
     {
         $parser = new Output('test');
-        
-        var_dump($parser->getMac());
+        $this->assertNull($parser->getSSID());
     }
 }
