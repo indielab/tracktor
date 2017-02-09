@@ -29,6 +29,6 @@ class Reader extends BaseReader
 {
     public function run()
     {
-        $this->runCallback(new OutputIterator([new Output('16:56:31.948018 1.0 Mb/s 2412 MHz 11b -63dB signal antenna 1 BSSID:Broadcast DA:Broadcast SA:0c:74:c2:27:4d:3c (oui Unknown) Probe Request () [1.0 2.0 5.5 11.0 Mbit]')]));
+        return $this->runCallback(new OutputIterator([new Output('16:56:31.948018 1.0 Mb/s 2412 MHz 11b -63dB signal antenna 1 BSSID:Broadcast DA:Broadcast SA:0c:74:c2:27:4d:3c (oui Unknown) Probe Request () [1.0 2.0 5.5 11.0 Mbit]')]));
     }
 }
