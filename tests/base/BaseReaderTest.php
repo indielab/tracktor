@@ -23,6 +23,10 @@ class BaseReaderTest extends TracktorTestCase
         $this->assertInstanceOf('indielab\tracktor\base\OutputIterator', $reader->run());
         $this->assertSame('device', $reader->getDevice());
         $this->assertSame(60, $reader->getWaitTimer());
+        
+        $this->assertTrue(is_array($reader->getCallback()));
+        $this->assertTrue(is_callable($reader->getCallback()));
+        $this->assertTrue(is_callable($reader->getCallback(), true));
     }
     
     // callback for `testArrayCallback` method.
