@@ -30,4 +30,11 @@ class BaseReaderTest extends TracktorTestCase
     {
         return $data;
     }
+    
+    public function testInvalidCallback()
+    {
+        $reader = new Reader('device  ', 60, 'notCallable');
+        $this->expectException('\indielab\tracktor\ExitException');
+        $reader->run();
+    }
 }

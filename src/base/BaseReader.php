@@ -3,6 +3,7 @@
 namespace indielab\tracktor\base;
 
 use indielab\tracktor\base\ReaderInterface;
+use indielab\tracktor\ExitException;
 
 abstract class BaseReader implements ReaderInterface
 {
@@ -51,8 +52,6 @@ abstract class BaseReader implements ReaderInterface
             return call_user_func($this->_callback, $data);
         }
     
-        if (is_array($this->_callback)) {
-            return call_user_func_array($this->_callback, [$data]);
-        }
+        throw new ExitException('Invalid callback paramter. Must be a callable function or an array with array object and method name.');
     }
 }
