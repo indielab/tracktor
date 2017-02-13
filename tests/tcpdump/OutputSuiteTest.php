@@ -40,7 +40,7 @@ class OutputSuiteTest extends TracktorTestCase
         foreach ($this->tests as $test) {
             $output = new Output($test['buffer']);
             $this->assertSame($test['signal'], $output->getSignal());
-            $this->assertSame($test['mac'], $output->getMac());
+            $this->assertSame(md5($test['mac']), $output->getMac());
             $this->assertSame($test['ssid'], $output->getSSID());
             $this->assertSame($test['valid'], $output->isValid());
         }
