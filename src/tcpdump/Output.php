@@ -39,9 +39,9 @@ class Output extends BaseOutputParser
         $prefix = substr($value, 0, 3);
 
         if ($prefix == 'SA:') {
-            return md5(substr_replace($value, '', 0, 3));
+            return md5(strtolower(substr_replace($value, '', 0, 3)));
         }
 
-        return md5($value);
+        return md5(strtolower($value));
     }
 }
